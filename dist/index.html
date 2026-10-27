@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#132c35">
+<title>AFTERGLOW — 風景に、ひたる。</title><meta name="description" content="ゆらぐ海、海上の花火、波打ち際、眠らない渋谷。四つの動く風景を、ブラウザーで。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23132c35'/%3E%3Cpath d='M10 30q11-15 22 0t22 0M10 42q11-15 22 0t22 0' fill='none' stroke='%23eee6cf' stroke-width='4'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<main id="experience" aria-label="四つの動く風景">
+ <div id="viewport"></div><canvas id="effects" aria-hidden="true"></canvas><div class="vignette"></div><div class="grain"></div>
+ <div id="loading" role="status"><span class="loader-mark">≈</span><span>風景をひらいています</span></div>
+ <div id="error" hidden role="alert"><h1>風景を描画できませんでした</h1><p>WebGLに対応したブラウザーで開き直してください。</p><button onclick="location.reload()">再読み込み</button></div>
+ <header class="ui">
+  <a class="brand" href="/" aria-label="AFTERGLOW ホーム"><svg viewBox="0 0 38 32" aria-hidden="true"><path d="M2 11c6-8 11-8 17 0s11 8 17 0M2 22c6-8 11-8 17 0s11 8 17 0"/></svg><span>AFTERGLOW<small>風景に、ひたる。</small></span></a>
+  <div class="header-right"><span class="realtime"><i></i> REALTIME SCENERY</span><button id="sound" class="round" aria-label="環境音をオン" aria-pressed="false" title="環境音 (M)"><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4zM17 9l4 6m0-6l-4 6"/></svg></button><button id="fullscreen" class="round" aria-label="全画面表示" title="全画面 (F)"><svg viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></div>
+ </header>
+ <section id="intro" class="ui" aria-live="polite"><div class="eyebrow"><span id="scene-number">01</span><span class="rule"></span><span id="scene-en">THE OPEN OCEAN</span></div><h1 id="scene-title">ただ、<br>眺めていたい。</h1><p id="scene-desc">光をほどく波。どこまでも続く水平線。<br>少しだけ、時間を忘れて。</p><span class="scene-tag" id="scene-tag">果てしない海</span></section>
+ <aside id="scene-detail" class="ui"><span id="detail-label">GOLDEN HOUR</span><span id="detail-note">光と波がつくる、一度きりの表情。</span></aside>
+ <div class="view-hint ui"><span class="drag-icon">↔</span> ドラッグして視点を動かす</div>
+ <footer class="ui">
+  <div class="collection-label"><span>どこへ、心をほどこう。</span><span>FOUR PLACES. YOUR MOMENT.</span></div>
+  <nav class="scenes" aria-label="風景を選択">
+   <button class="scene-card active" data-scene="0" aria-pressed="true"><span class="thumb ocean"></span><span class="card-copy"><small>01 / OCEAN</small><strong>海のゆらぎ</strong><span>光を映す、静かな時間</span></span><span class="card-arrow">↗</span></button>
+   <button class="scene-card" data-scene="1" aria-pressed="false"><span class="thumb fireworks"></span><span class="card-copy"><small>02 / FIREWORKS</small><strong>海上の花火</strong><span>夜空と水面に、花ひらく</span></span><span class="card-arrow">↗</span></button>
+   <button class="scene-card" data-scene="2" aria-pressed="false"><span class="thumb beach"></span><span class="card-copy"><small>03 / BEACH</small><strong>波打ち際</strong><span>寄せて、返す。そのくり返し</span></span><span class="card-arrow">↗</span></button>
+   <button class="scene-card" data-scene="3" aria-pressed="false"><span class="thumb city"></span><span class="card-copy"><small>04 / SHIBUYA</small><strong>渋谷の上空</strong><span>街は、今日も生きている</span></span><span class="card-arrow">↗</span></button>
+  </nav>
+  <div class="bottom-bar"><span id="caption">A LITTLE ESCAPE, ANYTIME.</span><div class="tools"><button id="pause" aria-label="アニメーションを一時停止" aria-pressed="false"><span id="pause-symbol">Ⅱ</span><span id="pause-label">一時停止</span></button><span class="divider"></span><button id="settings-toggle" aria-expanded="false" aria-controls="settings"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14M7 3v4m6 1v4m-6 1v4"/></svg>風景を調整</button><button id="hide-ui" title="没入モード (H)">没入する <span>↗</span></button></div></div>
+ </footer>
+ <section id="settings" hidden aria-label="風景の設定"><div class="settings-head"><span>自分のペースで。</span><button id="settings-close" aria-label="設定を閉じる">×</button></div><label>時間帯 <select id="time"><option value="0">夕暮れ</option><option value="1">昼</option><option value="2">夜</option></select></label><label>動きの強さ <input id="intensity" type="range" min="0.2" max="1.8" step="0.1" value="1"></label><label>画質 <select id="quality"><option value="auto">自動</option><option value="high">高画質</option><option value="low">軽量</option></select></label><label>自動カメラ <input id="auto-camera" type="checkbox" checked></label><label>環境音の音量 <input id="volume" type="range" min="0" max="1" step="0.05" value="0.35"></label><button id="launch" hidden>花火を打ち上げる ↗</button><p>リアルタイムCGによる風景です。<br>渋谷は街並みをモチーフにした再構成です。</p></section>
+ <button id="restore-ui" hidden>← 操作を表示 <kbd>H</kbd></button><div id="toast" role="status"></div>
+</main>
+<script type="module" src="/app.js"></script>
+</body></html>
